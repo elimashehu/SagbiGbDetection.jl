@@ -26,7 +26,7 @@ or
 
 ```julia
 julia> using Pkg
-julia> Pkg.add("SagbiGbDetection")
+julia> Pkg.add(url="https://github.com/elimashehu/SagbiGbDetection.jl")
 ```
 
 ## Documentation and Examples
