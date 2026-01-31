@@ -40,3 +40,9 @@ You can find a detailed documentation including various examples at 👉
 - Viktoriia Borovik  <vborovik@uni-osnabrueck.de>
 - Timothy Duff <timduff@uw.edu>
 - Elima Shehu <elima.shehu@mis.mpg.de>
+
+## ⚠️ **Version Dependency Warning**
+>
+> The implementation in the `main` branch relies on Julia-version–specific behavior.
+> For a portable and version-independent implementation, refer to the
+> `fix-julia-compatibility` branch.
