@@ -4,7 +4,8 @@ CurrentModule = SagbiGbDetection
 
 # SagbiGbDetection
 
-Documentation for [SagbiGbDetection](https://github.com/elimashehu/SagbiGbDetection.jl).
+[SagbiGbDetection.jl](https://github.com/elimashehu/SagbiGbDetection.jl)
+is a Julia package for Gröbner and SAGBI basis detection.
 
 ```@index
 ```
@@ -12,31 +13,37 @@ Documentation for [SagbiGbDetection](https://github.com/elimashehu/SagbiGbDetect
 
 # Getting Started
 
-SagbiGbDetection is a computer algebra package for the Julia programming 
-language, maintained by Viktoriia Borovik, Tim Duff and Elima Shehu.
+SagbiGbDetection is a computer algebra package for the Julia programming
+language, maintained by Viktoriia Borovik, Timothy Duff and Elima Shehu.
 
 - <https://github.com/elimashehu/SagbiGbDetection.jl> (Source code)
 
-The features of SagbiGbDetection include algorithms for detecting if
-a given set of polynomials form a Gröbner bases or SAGBI basis respectively
-with respect to some term order.
+SagbiGbDetection implements algorithms for detecting whether a given set
+of polynomials forms a Groebner basis or SAGBI basis with respect to some
+term order. The implementation uses Oscar.jl.
 
 
 ### Installation
 
-Please see <https://julialang.org/downloads/> 
-for instructions on how to obtain julia for your system.
+Install Julia from <https://julialang.org/downloads/>.
 
-SagbiGbDetection requires Julia 1.8 or newer. In principle it can be installed and used
-like any other Julia package:
+SagbiGbDetection requires Julia 1.8 or newer. Once the package is
+registered, install it with:
 
 ```julia
 julia> ]add SagbiGbDetection
 ```
 
-or
+Until registration is complete, install the development version from
+GitHub:
 
 ```julia
 julia> using Pkg
-julia> Pkg.add("SagbiGbDetection")
+julia> Pkg.add(url = "https://github.com/elimashehu/SagbiGbDetection.jl")
 ```
+
+### Examples
+
+The [examples](@ref SagbiGbDetection-Examples) page covers the main
+Groebner and SAGBI routines. The [application examples](@ref Application-Examples)
+page gives Julia code for examples from the paper.

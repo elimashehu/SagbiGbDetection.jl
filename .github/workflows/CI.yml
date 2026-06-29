@@ -7,6 +7,8 @@ on:
     branches:
       - main
     tags: '*'
+permissions:
+  contents: read
 jobs:
   test:
     name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
@@ -15,10 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.8' # Replace this with the minimum Julia version that your package supports. E.g. if your package requires Julia 1.5 or higher, change this to '1.5'.
+          - '1.8'
+          - '1'
         os:
           - ubuntu-latest
-          - macOS-latest
+          - macos-latest
         arch:
           - x64
     steps:
@@ -27,7 +30,7 @@ jobs:
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         env:
           cache-name: cache-artifacts
         with:
@@ -46,11 +49,15 @@ jobs:
   docs:
     name: Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+      statuses: write
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
         with:
-          version: '1.8'
+          version: '1'
       - run: |
           julia --project=docs -e '
             using Pkg
@@ -60,7 +67,7 @@ jobs:
           julia --project=docs -e '
             using Documenter: doctest
             using SagbiGbDetection
-            doctest(SagbiGbDetection)' # change MYPACKAGE to the name of your package
+            doctest(SagbiGbDetection)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
