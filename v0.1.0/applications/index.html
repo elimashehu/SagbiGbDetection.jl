@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Applications · SagbiGbDetection.jl</title><meta name="title" content="Applications · SagbiGbDetection.jl"/><meta property="og:title" content="Applications · SagbiGbDetection.jl"/><meta property="twitter:title" content="Applications · SagbiGbDetection.jl"/><meta name="description" content="Documentation for SagbiGbDetection.jl."/><meta property="og:description" content="Documentation for SagbiGbDetection.jl."/><meta property="twitter:description" content="Documentation for SagbiGbDetection.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">SagbiGbDetection.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../SagbiGBDetection_examples/">Examples</a></li><li class="is-active"><a class="tocitem" href>Applications</a><ul class="internal"><li><a class="tocitem" href="#Sullivant-Talaska-Ideal"><span>Sullivant-Talaska Ideal</span></a></li><li><a class="tocitem" href="#Minors-Of-A-General-Matrix"><span>Minors Of A General Matrix</span></a></li><li><a class="tocitem" href="#Truncation-Variety"><span>Truncation Variety</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Applications</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Applications</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/elimashehu/SagbiGbDetection.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Application-Examples"><a class="docs-heading-anchor" href="#Application-Examples">Application Examples</a><a id="Application-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Application-Examples" title="Permalink"></a></h1><p>Examples from the applications section of <em>SAGBI and Groebner Bases Detection</em> are written below in Julia, using Oscar.jl and SagbiGbDetection.jl.</p><pre><code class="language-julia hljs"># Oscar handles the polynomial rings; SagbiGbDetection handles the
+# Groebner and SAGBI checks.
+using Oscar
+using SagbiGbDetection
+using Combinatorics</code></pre><h2 id="Sullivant-Talaska-Ideal"><a class="docs-heading-anchor" href="#Sullivant-Talaska-Ideal">Sullivant-Talaska Ideal</a><a id="Sullivant-Talaska-Ideal-1"></a><a class="docs-heading-anchor-permalink" href="#Sullivant-Talaska-Ideal" title="Permalink"></a></h2><p>For the cycle graph on four vertices, the Sullivant-Talaska ideal <code>I_4</code> is generated by minors of selected cyclic submatrices. The code below detects weights where these generators form a Groebner basis.</p><pre><code class="language-julia hljs"># Polynomial ring QQ[s_ij] for an n x n symmetric matrix.
+function define_ring(n)
+    variables_R = vec([&quot;s_$(i)$(j)&quot; for i in 1:n, j in 1:n])
+    return polynomial_ring(QQ, variables_R)
+end
+
+# Start with an n x n matrix and impose symmetry.
+function symmetric_generic_matrix(v, n)
+    generic_matrix = reshape(v, n, n)
+    for i in 1:n
+        for j in 1:i-1
+            generic_matrix[i, j] = generic_matrix[j, i]
+        end
+    end
+    return generic_matrix
+end
+
+# Convert the Julia submatrix before taking its determinant in Oscar.
+function determinant_mpoly(submatrix::Matrix)
+    return det(matrix(submatrix))
+end
+
+# All s x s minors, indexed by choices of rows and columns.
+function compute_minors(matrix::Matrix{T}, s::Int) where T
+    m, n = size(matrix, 1), size(matrix, 2)
+    if m &lt; s || n &lt; s || s &lt; 1
+        throw(ArgumentError(&quot;Invalid values for m, n, or s&quot;))
+    end
+
+    determinants = T[]
+    for rows_combination in Combinatorics.combinations(1:m, s)
+        for cols_combination in Combinatorics.combinations(1:n, s)
+            minor = matrix[rows_combination, cols_combination]
+            push!(determinants, determinant_mpoly(copy(minor)))
+        end
+    end
+    return determinants
+end
+
+# The generators are the 3 x 3 minors of the selected cyclic submatrices.
+function k_submatrices_minors(generic_matrix, rows, cols, k)
+    minors_vec = eltype(generic_matrix)[]
+    for i in 1:k
+        sub_matrix = generic_matrix[rows[i], cols[i]]
+        append!(minors_vec, compute_minors(sub_matrix, 3))
+    end
+    return minors_vec
+end
+
+# Symmetric 4 x 4 matrix for the cycle graph.
+n = 4
+R, v = define_ring(n)
+generic_matrix = symmetric_generic_matrix(v, n)
+
+# Cyclic 3-row windows.
+rows = Vector{Vector{Int}}(undef, n)
+for i in 1:n
+    rows[i] = [(j + i - 2) % n + 1 for j in 1:3]
+end
+
+# Matching cyclic 3-column windows.
+cols = Vector{Vector{Int}}(undef, n)
+for i in 1:n
+    cols[i] = [(j + i + 1) % n + 1 for j in 0:2]
+end
+
+# Detect Groebner weights for the resulting generators.
+G = k_submatrices_minors(generic_matrix, rows, cols, n)
+weight_vectors = weightVectorsRealizingGB(G, R)
+length(weight_vectors)
+# 9</code></pre><h2 id="Minors-Of-A-General-Matrix"><a class="docs-heading-anchor" href="#Minors-Of-A-General-Matrix">Minors Of A General Matrix</a><a id="Minors-Of-A-General-Matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Minors-Of-A-General-Matrix" title="Permalink"></a></h2><p>Here the generators are the <code>2 x 2</code> minors of a general <code>3 x 3</code> matrix.</p><pre><code class="language-julia hljs"># Coordinate ring for a generic 3 x 3 matrix.
+T, v = polynomial_ring(QQ, [
+    &quot;t11&quot;, &quot;t12&quot;, &quot;t13&quot;,
+    &quot;t21&quot;, &quot;t22&quot;, &quot;t23&quot;,
+    &quot;t31&quot;, &quot;t32&quot;, &quot;t33&quot;,
+])
+(t11, t12, t13, t21, t22, t23, t31, t32, t33) = v
+
+t_ij = [
+    t11 t12 t13
+    t21 t22 t23
+    t31 t32 t33
+]
+
+# SAGBI weights for the 2 x 2 minors.
+minors = compute_minors(t_ij, 2)
+weightVectorsRealizingSAGBI(minors, T)
+# 6 weight vectors</code></pre><h2 id="Truncation-Variety"><a class="docs-heading-anchor" href="#Truncation-Variety">Truncation Variety</a><a id="Truncation-Variety-1"></a><a class="docs-heading-anchor-permalink" href="#Truncation-Variety" title="Permalink"></a></h2><p>The truncation variety <code>V_{1,3}</code> gives an example where no tested term order makes the parametrization a SAGBI basis.</p><pre><code class="language-julia hljs"># Coordinate ring for the parametrization.
+S, v = polynomial_ring(QQ, [
+    &quot;s&quot;, &quot;z1&quot;, &quot;z2&quot;, &quot;z3&quot;, &quot;z4&quot;, &quot;z5&quot;,
+    &quot;z6&quot;, &quot;z7&quot;, &quot;z8&quot;, &quot;z9&quot;, &quot;z10&quot;,
+])
+(s, z1, z2, z3, z4, z5, z6, z7, z8, z9, z10) = v
+
+# Parametrizing polynomials for V_{1,3}.
+Q = [
+    s,
+    s*z1,
+    s*z2,
+    s*z3,
+    s*z4,
+    s*z5,
+    s*z6,
+    s*z7,
+    s*z8,
+    s*z9,
+    s*(z1*z5 - z2*z4),
+    s*(z1*z6 - z3*z4),
+    s*(z2*z6 - z3*z5),
+    s*(z1*z8 - z2*z7),
+    s*(z1*z9 - z3*z7),
+    s*(z2*z9 - z3*z8),
+    s*(z4*z8 - z5*z7),
+    s*(z4*z9 - z6*z7),
+    s*(z5*z9 - z6*z8),
+    s*(z10 + z1*(z5*z9 - z6*z8) - z2*(z4*z9 - z6*z7) + z3*(z4*z8 - z5*z7)),
+]
+
+# The empty output records that no SAGBI weight was found.
+weightVectorsRealizingSAGBI(Q, S)
+# []</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../SagbiGBDetection_examples/">« Examples</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 3 July 2026 09:00">Friday 3 July 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
